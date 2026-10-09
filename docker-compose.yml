@@ -1,0 +1,29 @@
+services:
+  # Local development with hot reload: `docker compose up`
+  web:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: .env.local
+        required: false
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - WATCHPACK_POLLING=true
+
+  # Production-like build for testing: `docker compose --profile prod up --build prod`
+  prod:
+    profiles: ["prod"]
+    build:
+      context: .
+      target: prod
+    ports:
+      - "3001:3000"
+    env_file:
+      - path: .env.local
+        required: false
