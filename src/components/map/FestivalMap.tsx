@@ -325,35 +325,106 @@ export function FestivalMap({
   );
 }
 
-/** The festival ground: grass, paths and trees. Replace with the real site plan later. */
+/**
+ * The festival ground, traced from the NSU courtyard (Pirogova St 1, Novosibirsk):
+ * the triangular lawn inside the ring road, flower beds along the diagonal and the
+ * east side, and the main building beyond the road. Coordinates are map units
+ * (1000 × 680); booth and facility positions live in src/data/map.ts.
+ */
+
+// Lawn triangle: right angle at the bottom-right, long edge running diagonally.
+const LAWN = "330,580 820,90 820,580";
+
+// Flower-bed strips, drawn as thick rounded lines. Gaps between them are walkways.
+const DIAGONAL_BEDS: [number, number][] = [[0, 95], [115, 205], [225, 315], [335, 440]]; // distance along the diagonal
+const EAST_BEDS: [number, number][] = [[110, 265], [290, 450], [475, 640]]; // y ranges at x = 905
+
+const TREES: [number, number, number][] = [
+  // east edge of the lawn
+  [795, 130, 16], [795, 200, 18], [795, 270, 16], [795, 340, 18],
+  // south edge of the lawn
+  [390, 560, 16], [460, 560, 18], [530, 560, 16], [600, 560, 18], [670, 560, 16], [740, 560, 18],
+  // inside the lawn
+  [520, 460, 20], [620, 320, 18],
+];
+
+const FLOWER_COLORS = ["#e0a24a", "#f2c45a", "#d98b3a", "#c9d86a"];
+
 function MapGround() {
-  const trees: [number, number, number][] = [
-    [80, 90, 22], [130, 60, 16], [60, 160, 18], [900, 90, 22], [950, 150, 16], [860, 60, 14],
-    [70, 340, 18], [60, 400, 14], [940, 330, 20], [950, 400, 14], [300, 120, 16], [330, 170, 12],
-    [700, 190, 14], [260, 610, 18], [740, 610, 16], [940, 470, 14], [60, 640, 16], [950, 640, 18],
-    [300, 380, 12], [700, 380, 12], [270, 300, 14], [730, 290, 12],
-  ];
+  const diag = (d: number) => [155 + d, 510 - d] as const;
   return (
     <g>
-      <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="#e3eefc" />
-      <rect x="18" y="18" width={MAP_WIDTH - 36} height={MAP_HEIGHT - 36} rx="40" fill="#cfe7b8" />
-      <rect x="18" y="18" width={MAP_WIDTH - 36} height={MAP_HEIGHT - 36} rx="40" fill="none" stroke="#b5d69c" strokeWidth="3" />
-      {/* Paths */}
-      <g fill="#f4ead6" stroke="#e6d8bb" strokeWidth="2">
-        <rect x="455" y="160" width="90" height="510" />
-        <rect x="200" y="410" width="600" height="36" rx="18" />
-        <path d="M230 200 Q 330 170 455 200 L455 226 Q 330 198 230 228 Z" />
-        <path d="M545 200 Q 670 170 800 200 L800 228 Q 670 198 545 226 Z" />
-        <rect x="200" y="200" width="30" height="410" rx="15" />
-        <rect x="770" y="200" width="30" height="410" rx="15" />
+      {/* Outside the courtyard */}
+      <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="#eef2f6" />
+
+      {/* Main building beyond the road (north-west) */}
+      <polygon points="0,450 450,0 540,0 0,540" fill="#dce7f4" stroke="#c3d3e8" strokeWidth="2" />
+      <g stroke="#c3d3e8" strokeWidth="1.5">
+        {[60, 140, 220, 300, 380].map((d) => (
+          <line key={d} x1={d} y1={495 - d} x2={d + 18} y2={477 - d} />
+        ))}
       </g>
-      <circle cx="500" cy="428" r="46" fill="#f4ead6" stroke="#e6d8bb" strokeWidth="2" />
-      <circle cx="500" cy="428" r="26" fill="#9fd08a" />
-      <circle cx="500" cy="428" r="10" fill="#7fbfe8" />
-      {/* Garden stage lawn */}
-      <ellipse cx="170" cy="250" rx="70" ry="44" fill="#bfe0a3" />
+      <text
+        transform="translate(250 245) rotate(-45)"
+        textAnchor="middle"
+        fontSize="17"
+        fontWeight="700"
+        fill="#7d93b5"
+        letterSpacing="2"
+      >
+        NSU MAIN BUILDING
+      </text>
+
+      {/* Paved courtyard inside the ring road */}
+      <path d="M110 690 V528 L568 70 H905 Q940 70 940 105 V690 Z" fill="#f3ecdc" />
+
+      {/* Ring road */}
+      <path
+        d="M90 690 V520 L560 50 H905 Q960 50 960 105 V690"
+        fill="none"
+        stroke="#c7cbd2"
+        strokeWidth="40"
+        strokeLinejoin="round"
+      />
+
+      {/* Lawn with its kerb */}
+      <polygon points={LAWN} fill="none" stroke="#e2d5b6" strokeWidth="12" strokeLinejoin="round" />
+      <polygon points={LAWN} fill="#cbe6a8" stroke="#b6d78f" strokeWidth="2" strokeLinejoin="round" />
+
+      {/* Diagonal flower beds along the road */}
+      {DIAGONAL_BEDS.map(([a, b]) => {
+        const [x1, y1] = diag(a);
+        const [x2, y2] = diag(b);
+        return (
+          <g key={a}>
+            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#d9e8bd" strokeWidth="30" strokeLinecap="round" />
+            {Array.from({ length: Math.floor((b - a) / 14) }, (_, i) => {
+              const [x, y] = diag(a + 7 + i * 14);
+              const off = i % 2 === 0 ? -7 : 7;
+              return <circle key={i} cx={x + off} cy={y + off} r="4.5" fill={FLOWER_COLORS[i % FLOWER_COLORS.length]} />;
+            })}
+          </g>
+        );
+      })}
+
+      {/* East flower beds */}
+      {EAST_BEDS.map(([y1, y2]) => (
+        <g key={y1}>
+          <line x1="905" y1={y1} x2="905" y2={y2} stroke="#d9e8bd" strokeWidth="30" strokeLinecap="round" />
+          {Array.from({ length: Math.floor((y2 - y1) / 14) }, (_, i) => (
+            <circle
+              key={i}
+              cx={905 + (i % 2 === 0 ? -7 : 7)}
+              cy={y1 + 7 + i * 14}
+              r="4.5"
+              fill={FLOWER_COLORS[i % FLOWER_COLORS.length]}
+            />
+          ))}
+        </g>
+      ))}
+
       {/* Trees */}
-      {trees.map(([x, y, r], i) => (
+      {TREES.map(([x, y, r], i) => (
         <g key={i}>
           <circle cx={x} cy={y + 3} r={r} fill="#000" opacity="0.08" />
           <circle cx={x} cy={y} r={r} fill={i % 3 === 0 ? "#5aa458" : i % 3 === 1 ? "#6cb764" : "#4f9a4e"} />
