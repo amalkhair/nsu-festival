@@ -1,40 +1,125 @@
+
 import type { MapBooth, MapFacility } from "@/types";
 
-/**
- * Festival ground layout in map units. The SVG viewBox is 1000 × 680.
- * Booths line both sides of the central avenue, from the stage down to the entrance.
- * Swap these coordinates for the real site plan when it's available.
- */
 export const MAP_WIDTH = 1000;
 export const MAP_HEIGHT = 680;
 
+/**
+ * Festival layout — horseshoe / U formation.
+ * Semua koordinat berada di dalam viewBox 1000 × 680.
+ */
 export const booths: MapBooth[] = [
-  { id: "B-01", country: "indonesia", x: 395, y: 245 },
-  { id: "B-02", country: "china", x: 605, y: 245 },
-  { id: "B-03", country: "japan", x: 395, y: 310 },
-  { id: "B-04", country: "korea", x: 605, y: 310 },
-  { id: "B-05", country: "india", x: 395, y: 375 },
-  { id: "B-06", country: "thailand", x: 605, y: 375 },
-  { id: "B-07", country: "france", x: 395, y: 480 },
-  { id: "B-08", country: "germany", x: 605, y: 480 },
-  { id: "B-09", country: "usa", x: 395, y: 545 },
-  { id: "B-10", country: "brazil", x: 605, y: 545 },
-  { id: "B-11", country: "russia", x: 270, y: 480 },
-  { id: "B-12", country: "vietnam", x: 730, y: 480 },
+  // Blok 1: kiri bawah menuju tengah
+  { id: "1", country: "iran", x: 100, y: 485 },
+  { id: "2", country: "niger", x: 145, y: 460 },
+  { id: "3", country: "pakistan", x: 190, y: 435 },
+  { id: "4", country: "syria", x: 235, y: 410 },
+  { id: "5", country: "tajikistan", x: 280, y: 385 },
+  { id: "6", country: "india", x: 325, y: 360 },
+  { id: "7", country: "mexico", x: 370, y: 335 },
+
+  // Blok 2: tengah naik ke kanan atas
+  { id: "8", country: "serbia", x: 410, y: 300 },
+  { id: "9", country: "algeria", x: 450, y: 270 },
+  { id: "10", country: "english-countries", x: 490, y: 240 },
+  { id: "11", country: "chinese-tea", x: 530, y: 210 },
+  { id: "12", country: "germany", x: 570, y: 185 },
+  { id: "13", country: "france", x: 610, y: 165 },
+  { id: "14", country: "italy", x: 650, y: 150 },
+  { id: "15", country: "china", x: 690, y: 140 },
+  { id: "16", country: "indonesia", x: 730, y: 135 },
+  { id: "17", country: "japan", x: 775, y: 135 },
+  { id: "18", country: "russia", x: 820, y: 145 },
+  { id: "19", country: "azerbaijan", x: 865, y: 160 },
+
+  // Blok 3: deret bawah, kiri ke kanan
+  { id: "20", country: "sibupk", x: 300, y: 590 },
+  { id: "21", country: "engineering", x: 350, y: 590 },
+  { id: "22", country: "sibstrin", x: 400, y: 590 },
+  { id: "23", country: "ngpu", x: 450, y: 590 },
+  { id: "24", country: "nguadi", x: 500, y: 590 },
+  { id: "25", country: "ngtu", x: 550, y: 590 },
+  { id: "26", country: "nigeria", x: 600, y: 590 },
+
+  // Blok 4: sisi kanan bawah
+  { id: "27", country: "uzbekistan", x: 650, y: 430 },
+  { id: "28", country: "thailand", x: 695, y: 455 },
+  { id: "29", country: "burkina-faso", x: 740, y: 480 },
+  { id: "30", country: "myanmar", x: 785, y: 505 },
+  { id: "31", country: "sri-lanka", x: 830, y: 530 },
+
+  // Blok 5: deret vertikal paling kanan
+  { id: "32", country: "bangladesh", x: 925, y: 280 },
+  { id: "33", country: "karakalpakstan", x: 925, y: 330 },
+  { id: "34", country: "korea", x: 925, y: 380 },
+  { id: "35", country: "tea-pavilion", x: 925, y: 430 },
+  { id: "36", country: "unassigned-36", x: 925, y: 480 },
 ];
 
 export const facilities: MapFacility[] = [
-  { id: "stage-main", type: "stage", label: "Main Stage", x: 500, y: 112 },
-  { id: "stage-garden", type: "stage", label: "Garden Stage", x: 170, y: 250 },
-  { id: "food-west", type: "food", label: "Food Court West", x: 230, y: 360 },
-  { id: "food-east", type: "food", label: "Food Court East", x: 790, y: 330 },
-  { id: "food-drinks", type: "food", label: "Drinks & Tea Corner", x: 815, y: 220 },
-  { id: "info-main", type: "info", label: "Information Desk", x: 430, y: 615 },
-  { id: "info-stage", type: "info", label: "Lost & Found", x: 690, y: 120 },
-  { id: "toilet-east", type: "toilet", label: "Toilets", x: 850, y: 540 },
-  { id: "toilet-west", type: "toilet", label: "Toilets", x: 150, y: 470 },
-  { id: "medical", type: "medical", label: "Medical Tent", x: 850, y: 610 },
-  { id: "rest-west", type: "rest", label: "Rest Area", x: 175, y: 575 },
-  { id: "rest-east", type: "rest", label: "Rest Area", x: 820, y: 420 },
-  { id: "entrance", type: "entrance", label: "Entrance", x: 500, y: 650 },
+  // Panggung utama di dalam area U, tidak menutupi booth
+  {
+    id: "stage-main",
+    type: "stage",
+    label: "Main Stage",
+    x: 810,
+    y: 250,
+  },
+
+  // Pintu masuk di pojok kanan atas
+  {
+    id: "entrance",
+    type: "entrance",
+    label: "Entrance",
+    x: 925,
+    y: 90,
+  },
+
+  // Panggung tambahan
+  {
+    id: "stage-garden",
+    type: "stage",
+    label: "Garden Stage",
+    x: 190,
+    y: 230,
+  },
+
+  // Area makanan di sisi bawah
+  {
+    id: "food-west",
+    type: "food",
+    label: "Food Court West",
+    x: 120,
+    y: 625,
+  },
+  {
+    id: "food-east",
+    type: "food",
+    label: "Food Court East",
+    x: 750,
+    y: 625,
+  },
+
+  // Fasilitas umum
+  {
+    id: "info-main",
+    type: "info",
+    label: "Information Desk",
+    x: 520,
+    y: 430,
+  },
+  {
+    id: "toilet-east",
+    type: "toilet",
+    label: "Toilets",
+    x: 960,
+    y: 560,
+  },
+  {
+    id: "medical",
+    type: "medical",
+    label: "Medical Tent",
+    x: 500,
+    y: 100,
+  },
 ];
