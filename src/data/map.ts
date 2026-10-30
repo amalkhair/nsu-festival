@@ -1,51 +1,53 @@
 import type { MapBooth, MapFacility } from "@/types";
 
 /**
- * Festival ground layout in map units. The SVG viewBox is 1000 × 680
+ * Festival ground layout in map units. The SVG viewBox is 1000 × 820
  * (x = left → right, y = top → bottom).
  *
- * The ground is the NSU courtyard (drawn in MapGround, FestivalMap.tsx):
- *   - the ring road runs along the left edge, diagonally up to the top, and down the right edge
- *   - the triangular lawn has corners at (330,580), (820,90) and (820,580)
- *   - the diagonal promenade between the flower beds and the lawn follows the line x + y = 780
- *   - the east promenade (between lawn and east flower beds) is centred on x = 852
- *   - the south promenade (below the lawn) is centred on y = 630
+ *   - Stage plaza: the strip at the top (y 0–170), north of the courtyard
+ *   - Outer diagonal row: on the walkway beside the main building, line x + y = 715
+ *   - Inner diagonal row: on the promenade beside the lawn, line x + y = 920
+ *   - Top row: between the walkway and the lawn's top corner, y = 250
+ *   - East column: between the lawn and the east flower beds, x = 850
+ *   - The south side (below the lawn) has no stands
  */
 export const MAP_WIDTH = 1000;
-export const MAP_HEIGHT = 680;
+export const MAP_HEIGHT = 820;
 
 export const booths: MapBooth[] = [
-  // Diagonal promenade, bottom-left to top-right (x + y = 780, 60-unit steps)
-  { id: "B-01", country: "indonesia", x: 240, y: 540 },
-  { id: "B-02", country: "china", x: 300, y: 480 },
-  { id: "B-03", country: "japan", x: 360, y: 420 },
-  { id: "B-04", country: "korea", x: 420, y: 360 },
-  { id: "B-05", country: "india", x: 480, y: 300 },
-  { id: "B-06", country: "thailand", x: 540, y: 240 },
-  { id: "B-07", country: "france", x: 600, y: 180 },
-  { id: "B-08", country: "germany", x: 660, y: 120 },
-  // South promenade, below the lawn, left to right
-  { id: "B-09", country: "usa", x: 410, y: 630 },
-  { id: "B-10", country: "brazil", x: 500, y: 630 },
-  { id: "B-11", country: "russia", x: 590, y: 630 },
-  { id: "B-12", country: "vietnam", x: 680, y: 630 },
+  // Inner diagonal row, bottom-left to top-right
+  { id: "B-01", country: "indonesia", x: 370, y: 550 },
+  { id: "B-02", country: "china", x: 450, y: 470 },
+  { id: "B-03", country: "japan", x: 530, y: 390 },
+  { id: "B-04", country: "korea", x: 610, y: 310 },
+  // Top row, left to right
+  { id: "B-05", country: "india", x: 720, y: 250 },
+  { id: "B-06", country: "thailand", x: 810, y: 250 },
+  // East column, top to bottom
+  { id: "B-07", country: "france", x: 850, y: 340 },
+  { id: "B-08", country: "germany", x: 850, y: 430 },
+  { id: "B-09", country: "usa", x: 850, y: 520 },
+  // Outer diagonal row (beside the main building), bottom-left to top-right
+  { id: "B-10", country: "brazil", x: 240, y: 475 },
+  { id: "B-11", country: "russia", x: 330, y: 385 },
+  { id: "B-12", country: "vietnam", x: 420, y: 295 },
 ];
 
 export const facilities: MapFacility[] = [
+  // Stage plaza
+  { id: "stage-main", type: "stage", label: "Main Stage", x: 790, y: 85 },
+  { id: "toilet-north", type: "toilet", label: "Toilets", x: 950, y: 55 },
+  { id: "info-stage", type: "info", label: "Lost & Found", x: 950, y: 120 },
   // On the lawn
-  { id: "stage-main", type: "stage", label: "Main Stage", x: 690, y: 440 },
-  { id: "stage-garden", type: "stage", label: "Garden Stage", x: 730, y: 230 },
-  { id: "rest-lawn-west", type: "rest", label: "Rest Area (picnic lawn)", x: 430, y: 505 },
-  { id: "rest-lawn-east", type: "rest", label: "Rest Area (picnic lawn)", x: 700, y: 300 },
-  // East promenade, top to bottom
-  { id: "food-east", type: "food", label: "Food Court East", x: 852, y: 190 },
-  { id: "food-drinks", type: "food", label: "Drinks & Tea Corner", x: 852, y: 300 },
-  { id: "info-stage", type: "info", label: "Lost & Found", x: 852, y: 410 },
-  { id: "medical", type: "medical", label: "Medical Tent", x: 852, y: 510 },
-  { id: "toilet-east", type: "toilet", label: "Toilets", x: 852, y: 610 },
-  // South promenade
-  { id: "food-south", type: "food", label: "Food Court South", x: 770, y: 632 },
-  { id: "info-main", type: "info", label: "Information Desk", x: 330, y: 640 },
-  { id: "entrance", type: "entrance", label: "Entrance", x: 230, y: 650 },
-  { id: "toilet-west", type: "toilet", label: "Toilets", x: 140, y: 600 },
+  { id: "stage-garden", type: "stage", label: "Garden Stage", x: 720, y: 440 },
+  { id: "rest-lawn-west", type: "rest", label: "Rest Area (picnic lawn)", x: 480, y: 660 },
+  { id: "rest-lawn-east", type: "rest", label: "Rest Area (picnic lawn)", x: 680, y: 520 },
+  // East promenade, below the stands
+  { id: "food-east", type: "food", label: "Food Court", x: 850, y: 600 },
+  { id: "food-drinks", type: "food", label: "Drinks & Tea Corner", x: 850, y: 670 },
+  { id: "medical", type: "medical", label: "Medical Tent", x: 850, y: 740 },
+  // South-west corner
+  { id: "toilet-west", type: "toilet", label: "Toilets", x: 140, y: 740 },
+  { id: "info-main", type: "info", label: "Information Desk", x: 330, y: 780 },
+  { id: "entrance", type: "entrance", label: "Entrance", x: 230, y: 790 },
 ];

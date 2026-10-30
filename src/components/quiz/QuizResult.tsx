@@ -112,6 +112,7 @@ function SouvenirPicker({ souvenirs, country, year }: { souvenirs: Souvenir[]; c
         frame: frameRef.current,
         souvenir: current,
         caption: t("result.souvenirFooter", { year }),
+        tagline: t("footer.tagline"),
         countryName: country.name,
         color: country.theme.primary,
       });
@@ -176,12 +177,14 @@ async function renderSouvenir({
   caption,
   countryName,
   color,
+  tagline,
 }: {
   frame: HTMLElement | null;
   souvenir: Souvenir;
   caption: string;
   countryName: string;
   color: string;
+  tagline: string;
 }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -222,7 +225,7 @@ async function renderSouvenir({
   } catch {
     /* ignore */
   }
-  const font = `"Plus Jakarta Sans", system-ui, sans-serif`;
+  const font = `"Plus Jakarta Sans", "Manrope", system-ui, sans-serif`;
   ctx.fillStyle = "#0b1b3f";
   ctx.font = `800 64px ${font}`;
   ctx.fillText(souvenir.title, 64, PHOTO + 110);
@@ -231,7 +234,7 @@ async function renderSouvenir({
   ctx.fillText(`${countryName} · ${caption}`, 64, PHOTO + 170);
   ctx.fillStyle = color;
   ctx.font = `700 28px ${font}`;
-  ctx.fillText("A World of Cultures, One Community", 64, PHOTO + 222);
+  ctx.fillText(tagline, 64, PHOTO + 222);
 
   return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }

@@ -3,6 +3,12 @@
  * Use {name} placeholders for values inserted at runtime.
  */
 export const en = {
+  "brand.short": "NSU",
+  "brand.subtitle": "International Cultural Festival",
+  "brand.name": "NSU International Cultural Festival",
+  "meta.description": "A World of Cultures, One Community. Map, schedule, country booths, quizzes and recipes.",
+  "meta.result": "Quiz Result",
+
   "nav.home": "Home",
   "nav.map": "Map",
   "nav.schedule": "Schedule",
@@ -48,6 +54,7 @@ export const en = {
   "map.legendRest": "Rest Area",
   "map.legendToilet": "Toilet",
   "map.legendMedical": "Medical",
+  "map.mainBuilding": "NSU MAIN BUILDING",
 
   "schedule.title": "Performance Schedule",
   "schedule.subtitle": "Enjoy traditional performances from around the world.",

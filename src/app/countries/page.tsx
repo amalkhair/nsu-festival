@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translate";
 import { getCountries } from "@/lib/api";
 import { Container } from "@/components/ui/primitives";
 import { CountriesView } from "@/components/festival/CountriesView";
 import { T } from "@/components/ui/T";
 
-export const metadata: Metadata = { title: "Countries" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: translate(await getLocale(), "nav.countries") };
+}
 
 export default async function CountriesPage() {
   const countries = await getCountries();

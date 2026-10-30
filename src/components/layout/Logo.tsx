@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 export function Logo() {
+  const t = useT();
   return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label="NSU International Cultural Festival, home">
+    <Link href="/" className="flex items-center gap-2.5" aria-label={t("brand.name")}>
       <svg viewBox="0 0 40 40" className="size-9 shrink-0" aria-hidden>
         <defs>
           <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
@@ -20,8 +24,8 @@ export function Logo() {
         <circle cx="30" cy="10" r="3.5" fill="#ffd166" />
       </svg>
       <span className="flex flex-col leading-none">
-        <span className="text-[17px] font-extrabold tracking-tight text-ink">NSU</span>
-        <span className="mt-0.5 text-[10px] font-semibold text-ink-soft sm:text-[11px]">International Cultural Festival</span>
+        <span className="text-[17px] font-extrabold tracking-tight text-ink">{t("brand.short")}</span>
+        <span className="mt-0.5 text-[10px] font-semibold text-ink-soft sm:text-[11px]">{t("brand.subtitle")}</span>
       </span>
     </Link>
   );
