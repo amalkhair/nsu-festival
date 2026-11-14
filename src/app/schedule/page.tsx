@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translate";
 import { getFestival, getSchedule } from "@/lib/api";
 import { Container } from "@/components/ui/primitives";
 import { ScheduleView } from "@/components/festival/ScheduleView";
 import { T } from "@/components/ui/T";
 
-export const metadata: Metadata = { title: "Performance Schedule" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: translate(await getLocale(), "schedule.title") };
+}
 
 export default async function SchedulePage() {
   const [festival, items] = await Promise.all([getFestival(), getSchedule()]);

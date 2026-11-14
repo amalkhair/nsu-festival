@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCountry, getCountryContent, getCountrySlugsWithContent } from "@/lib/api";
+import { getCountry, getCountryContent } from "@/lib/api";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translate";
 import { Container } from "@/components/ui/primitives";
 import { T } from "@/components/ui/T";
 import { CountrySubnav } from "@/components/country/CountrySubnav";
@@ -8,13 +10,9 @@ import { FoodList } from "@/components/food/FoodList";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return (await getCountrySlugsWithContent()).map((slug) => ({ slug }));
-}
-
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const country = await getCountry((await params).slug);
-  return { title: country ? `${country.demonym} Food & Recipes` : "Food" };
+  return { title: country ? translate(await getLocale(), "food.title", { demonym: country.demonym }) : "" };
 }
 
 export default async function FoodPage({ params }: Params) {

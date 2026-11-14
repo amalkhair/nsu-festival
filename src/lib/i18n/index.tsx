@@ -1,22 +1,11 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Locale } from "@/types";
-import { en, type TranslationKey } from "./dictionaries/en";
-import { ru } from "./dictionaries/ru";
-import { defaultLocale, enabledLocales, LOCALE_STORAGE_KEY } from "./config";
-
-const dictionaries: Record<Locale, Partial<Record<TranslationKey, string>>> = { en, ru };
-
-type Vars = Record<string, string | number>;
-
-export function translate(locale: Locale, key: TranslationKey, vars?: Vars): string {
-  const template = dictionaries[locale][key] ?? en[key] ?? key;
-  if (!vars) return template;
-  return template.replace(/\{(\w+)\}/g, (_, name: string) =>
-    name in vars ? String(vars[name]) : `{${name}}`,
-  );
-}
+import type { TranslationKey } from "./dictionaries/en";
+import { enabledLocales, LOCALE_COOKIE } from "./config";
+import { translate, type Vars } from "./translate";
 
 interface I18nValue {
   locale: Locale;
@@ -26,32 +15,29 @@ interface I18nValue {
 
 const I18nContext = createContext<I18nValue | null>(null);
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
-
-  // Restore the visitor's choice after hydration.
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
-      if (saved && enabledLocales.includes(saved)) setLocaleState(saved);
-    } catch {
-      /* storage unavailable — keep default */
-    }
-  }, []);
+/**
+ * The server decides the language (from the cookie, or the browser's language on a
+ * first visit) and passes it in as `initialLocale`. Switching language saves the
+ * cookie and refreshes, so server-rendered content (quiz, recipes…) reloads in the
+ * new language too.
+ */
+export function I18nProvider({ initialLocale, children }: { initialLocale: Locale; children: React.ReactNode }) {
+  const router = useRouter();
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
 
-  const setLocale = useCallback((next: Locale) => {
-    if (!enabledLocales.includes(next)) return;
-    setLocaleState(next);
-    try {
-      window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
-    } catch {
-      /* ignore */
-    }
-  }, []);
+  const setLocale = useCallback(
+    (next: Locale) => {
+      if (!enabledLocales.includes(next)) return;
+      setLocaleState(next);
+      document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
+      router.refresh();
+    },
+    [router],
+  );
 
   const value = useMemo<I18nValue>(
     () => ({ locale, setLocale, t: (key, vars) => translate(locale, key, vars) }),

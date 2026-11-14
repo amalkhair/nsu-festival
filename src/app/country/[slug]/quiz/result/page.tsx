@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCountry, getCountryContent, getCountrySlugsWithContent, getFestival } from "@/lib/api";
+import { getCountry, getCountryContent, getFestival } from "@/lib/api";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translate";
 import { Container } from "@/components/ui/primitives";
 import { QuizResult } from "@/components/quiz/QuizResult";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return (await getCountrySlugsWithContent()).map((slug) => ({ slug }));
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: translate(await getLocale(), "meta.result") };
 }
-
-export const metadata: Metadata = { title: "Quiz Result" };
 
 export default async function QuizResultPage({ params }: Params) {
   const { slug } = await params;

@@ -103,9 +103,14 @@ illustration `scene`) and a booth to `src/data/map.ts`.
 
 **Use real photos:** see `public/images/README.md`. Until then, every image is an illustrated placeholder.
 
-**Turn on Russian:** fill in `src/lib/i18n/dictionaries/ru.ts` (missing keys fall back to English), then add
-`"ru"` to `enabledLocales` in `src/lib/i18n/config.ts`. Country content can get Russian versions through the
-`locale` argument in `src/data/countries/content.ts`. UI text is always pulled from the dictionaries, never
+**Languages (English and Russian):** the visitor's language is stored in the `nsu-locale` cookie; on a first
+visit it follows the browser language. The server reads it (`src/lib/i18n/server.ts`) and `src/lib/api` returns
+content in that language. Where the text lives:
+- Buttons and labels: `src/lib/i18n/dictionaries/en.ts` and `ru.ts` (a missing Russian key is a type error)
+- Festival, schedule, stages and map labels: `src/data/ru/festival.ts`
+- Country names and tags: `src/data/ru/countries.ts`
+- Indonesia quiz, recipes, culture and places: `src/data/countries/indonesia/ru.ts`
+Anything without a Russian version falls back to English. UI text is always pulled from the dictionaries, never
 hard-coded in components.
 
 **Edit the map:** booth and facility positions are in `src/data/map.ts` (the map is 1000 × 680 units).

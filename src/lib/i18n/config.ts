@@ -8,10 +8,8 @@ export const allLocales: { code: Locale; label: string; native: string }[] = [
   { code: "ru", label: "RU", native: "Русский" },
 ];
 
-/**
- * Locales visitors can actually pick. Add "ru" here once
- * dictionaries/ru.ts and the Russian content are filled in.
- */
-export const enabledLocales: Locale[] = ["en"];
+/** Locales visitors can pick. Remove one here to hide it from the switcher. */
+export const enabledLocales: Locale[] = ["en", "ru"];
 
-export const LOCALE_STORAGE_KEY = "nsu-festival:locale";
+/** Cookie that remembers the visitor's language (read by the server). */
+export const LOCALE_COOKIE = "nsu-locale";

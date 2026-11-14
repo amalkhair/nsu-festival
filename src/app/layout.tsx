@@ -1,17 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translate";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { BottomNav } from "@/components/layout/BottomNav";
 
-export const metadata: Metadata = {
-  title: {
-    default: "NSU International Cultural Festival",
-    template: "%s · NSU Cultural Festival",
-  },
-  description: "A World of Cultures, One Community. Map, schedule, country booths, quizzes and recipes.",
-};
+// Pages depend on the visitor's language (cookie), so they render per request.
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const name = translate(locale, "brand.name");
+  return {
+    title: { default: name, template: `%s · ${name}` },
+    description: translate(locale, "meta.description"),
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#1d5bff",
@@ -20,19 +26,20 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
         />
       </head>
       <body className="min-h-dvh font-sans text-ink antialiased">
-        <I18nProvider>
+        <I18nProvider initialLocale={locale}>
           <SiteHeader />
           <main className="pb-28 md:pb-0">{children}</main>
           <SiteFooter />

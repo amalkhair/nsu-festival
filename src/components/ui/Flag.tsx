@@ -7,7 +7,7 @@ export function Flag({ code, name, className }: { code: string; name?: string; c
     <img
       src={flagUrl(code, 80)}
       srcSet={`${flagUrl(code, 160)} 2x`}
-      alt={name ? `Flag of ${name}` : ""}
+      alt={name ?? ""}
       className={cn("inline-block aspect-[3/2] h-4 rounded-[3px] object-cover ring-1 ring-black/10", className)}
       loading="lazy"
     />

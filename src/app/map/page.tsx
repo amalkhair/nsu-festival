@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/i18n/server";
+import { translate } from "@/lib/i18n/translate";
 import { getCountries, getMap } from "@/lib/api";
 import { Container } from "@/components/ui/primitives";
 import { FestivalMap } from "@/components/map/FestivalMap";
 import { T } from "@/components/ui/T";
 
-export const metadata: Metadata = { title: "Festival Map" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: translate(await getLocale(), "map.title") };
+}
 
 export default async function MapPage() {
   const [countries, { booths, facilities }] = await Promise.all([getCountries(), getMap()]);

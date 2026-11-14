@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCountries, getCountry, getCountryContent } from "@/lib/api";
+import { getCountry, getCountryContent } from "@/lib/api";
 import { CountryHome } from "@/components/country/CountryHome";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return (await getCountries()).map((c) => ({ slug: c.slug }));
-}
-
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const country = await getCountry((await params).slug);
-  return { title: country ? `Discover ${country.name}` : "Country" };
+  return { title: country?.name ?? "" };
 }
 
 export default async function CountryPage({ params }: Params) {
