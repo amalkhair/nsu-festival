@@ -1,3 +1,4 @@
+import { getSiteOrigin } from "@/lib/site";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n";
@@ -14,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const name = translate(locale, "brand.name");
   return {
+    metadataBase: getSiteOrigin(),
     title: { default: name, template: `%s · ${name}` },
     description: translate(locale, "meta.description"),
   };

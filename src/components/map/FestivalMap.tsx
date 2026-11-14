@@ -1,8 +1,8 @@
-
 "use client";
 
 import { mapIdentities } from "@/data/countries/map-identities";
 import Link from "next/link";
+import { getStandKind, standSlug } from "@/lib/stand";
 import { useMemo, useState } from "react";
 import { ArrowRight, ChevronRight, Minus, Plus, Search, X } from "lucide-react";
 import type {
@@ -13,8 +13,9 @@ import type {
 } from "@/types";
 import { useT } from "@/lib/i18n";
 import type { TranslationKey } from "@/lib/i18n/dictionaries/en";
-import { cn, flagUrl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { MAP_HEIGHT, MAP_WIDTH } from "@/data/map";
+import { STAGE, STAND_BY_ID } from "@/data/map/stand-positions";
 import { Card, Pills } from "@/components/ui/primitives";
 import { Flag } from "@/components/ui/Flag";
 
@@ -111,7 +112,7 @@ export function FestivalMap({
     { value: "all", label: t("map.filterAll") },
     { value: "countries", label: t("map.filterCountries") },
     { value: "stage", label: t("map.filterStage") },
-    { value: "food", label: t("map.filterFood") },
+
     { value: "facilities", label: t("map.filterFacilities") },
   ];
 
@@ -145,7 +146,7 @@ export function FestivalMap({
                 aria-label={t("map.title")}
                 onClick={() => setSelection(null)}
               >
-                <MapGround />
+                <image href="/maps/nsu-courtyard.svg" x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} preserveAspectRatio="xMidYMid meet" pointerEvents="none" />
 
                 {/* Facilities */}
                 {facilities.map((facility) => {
@@ -163,7 +164,17 @@ export function FestivalMap({
                       <g
                         key={facility.id}
                         className="cursor-pointer"
+                        role="button"
+                        tabIndex={0}
+                        aria-label={facility.label}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            setSelection({ kind: "facility", id: facility.id });
+                          }
+                        }}
                         opacity={visible ? 1 : 0.3}
+                        transform={`translate(${facility.x} ${facility.y}) rotate(${STAGE.angle})`}
                         onClick={(event) => {
                           event.stopPropagation();
                           setSelection({
@@ -174,52 +185,30 @@ export function FestivalMap({
                       >
                         <title>{facility.label}</title>
                         <rect
-                          x={facility.x - 110}
-                          y={facility.y - 52}
-                          width="220"
-                          height="96"
-                          rx="10"
+                          x={-STAGE.width / 2}
+                          y={-STAGE.height / 2}
+                          width={STAGE.width}
+                          height={STAGE.height}
+                          rx="3"
                           fill="#3b2a7a"
                           stroke={active ? "#1d5bff" : "none"}
                           strokeWidth="5"
                         />
                         <rect
-                          x={facility.x - 120}
-                          y={facility.y - 62}
-                          width="240"
-                          height="26"
-                          rx="8"
-                          fill="#e63946"
-                        />
-                        <rect
-                          x={facility.x - 90}
-                          y={facility.y - 30}
-                          width="180"
-                          height="58"
-                          rx="6"
+                          x="-36"
+                          y="-20"
+                          width="72"
+                          height="36"
+                          rx="2"
                           fill="#5b45b0"
                         />
-                        <circle
-                          cx={facility.x}
-                          cy={facility.y - 6}
-                          r="16"
-                          fill="#ef476f"
-                        />
+                        {/* Local +Y points to the final row 27–31. */}
+                        <path d="M-44 18H44V27H-44Z" fill="#e63946" />
                         <text
-                          x={facility.x}
-                          y={facility.y}
+                          x="0"
+                          y="4"
                           textAnchor="middle"
-                          fontSize="18"
-                          fill="#fff"
-                          fontWeight="700"
-                        >
-                          ♪
-                        </text>
-                        <text
-                          x={facility.x}
-                          y={facility.y + 26}
-                          textAnchor="middle"
-                          fontSize="16"
+                          fontSize="9"
                           fill="#fff"
                           fontWeight="700"
                         >
@@ -248,7 +237,7 @@ export function FestivalMap({
                           x={facility.x}
                           y={facility.y + 5}
                           textAnchor="middle"
-                          fontSize="14"
+                          fontSize="9"
                           fill="#fff"
                           fontWeight="700"
                         >
@@ -311,78 +300,44 @@ export function FestivalMap({
                   const active =
                     selection?.kind === "booth" &&
                     selection.id === booth.id;
-
-                  const code = getMapCode(country);
-                  const fontSize =
-                    code.length > 5 ? 8 : code.length > 4 ? 9 : code.length > 3 ? 10 : 12;
+                  const placement = STAND_BY_ID[booth.id];
+                  const width = placement?.width ?? 20;
+                  const height = placement?.height ?? 25;
+                  const angle = placement?.angle ?? -16;
 
                   return (
                     <g
                       key={booth.id}
                       className="cursor-pointer"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`#${booth.id} · ${country.name}`}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectBooth(booth.id);
+                        }
+                      }}
                       opacity={boothsVisible ? 1 : 0.25}
-                      transform={`translate(${booth.x} ${booth.y})`}
+                      transform={`translate(${booth.x} ${booth.y}) rotate(${angle})`}
                       onClick={(event) => {
                         event.stopPropagation();
                         selectBooth(booth.id);
                       }}
                     >
-                      <title>{`${country.name} (${code})`}</title>
+                      <title>{`#${booth.id} · ${country.name}`}</title>
 
                       <g
                         transform={active ? "scale(1.12)" : undefined}
                         style={{ transition: "transform .2s" }}
                       >
-                        {/* Shadow */}
-                        <rect
-                          x="-36"
-                          y="-21"
-                          width="72"
-                          height="48"
-                          rx="8"
-                          fill="#000"
-                          opacity="0.12"
-                          transform="translate(0 3)"
-                        />
-
-                        {/* Booth card */}
-                        <rect
-                          x="-36"
-                          y="-21"
-                          width="72"
-                          height="48"
-                          rx="8"
-                          fill="#fff"
-                          stroke={active ? "#1d5bff" : "#d5dceb"}
-                          strokeWidth={active ? 3 : 1.5}
-                        />
-
-                        {/* Country theme stripe */}
-                        <path
-                          d="M-28 -21 H28 Q36 -21 36 -13 V-11 H-36 V-13 Q-36 -21 -28 -21 Z"
-                          fill={country.theme.primary}
-                        />
-
-                        {/* Flag */}
-                        <image
-                          href={flagUrl(country.flag, 80)}
-                          x="-12"
-                          y="-7"
-                          width="24"
-                          height="16"
-                          preserveAspectRatio="xMidYMid meet"
-                        />
-
-                        {/* Short country or organization code */}
-                        <text
-                          x="0"
-                          y="20"
-                          textAnchor="middle"
-                          fontSize={fontSize}
-                          fontWeight="800"
-                          fill="#0b1b3f"
-                        >
-                          {code}
+                        {/* Individual numbered stands; the card lives inside the original map UI. */}
+                        <rect x={-width / 2} y={-height / 2} width={width} height={height} rx="0.8"
+                          fill="#fff" stroke={active ? "#1d5bff" : "#485662"} strokeWidth={active ? 2.2 : 1.1} />
+                        <text x="0" y={Number(booth.id) >= 27 ? 2.6 : 3.4} textAnchor="middle"
+                          fontSize={Number(booth.id) >= 27 ? 7 : Number(booth.id) >= 20 ? 9 : 10}
+                          fontWeight="800" fill="#12263f">
+                          {booth.id}
                         </text>
                       </g>
                     </g>
@@ -399,20 +354,17 @@ export function FestivalMap({
                     top: `${(popupAt.y / MAP_HEIGHT) * 100}%`,
                     transform: `translate(${
                       popupAt.x > MAP_WIDTH * 0.6 ? "-100%" : "0"
-                    }, ${popupAt.y < 200 ? "40px" : "-115%"})`,
+                    }, ${popupAt.y < 125 ? "40px" : "-115%"})`,
                   }}
                 >
                   <div className="pointer-events-auto w-60 rounded-xl bg-white p-3 shadow-lift ring-1 ring-line">
                     <div className="flex items-start justify-between gap-2">
                       {selectedBooth ? (
                         <div className="flex items-center gap-2.5">
-                          <Flag
-                            code={selectedBooth.country.flag}
-                            className="h-6"
-                          />
+                          {getStandKind(selectedBooth.country.slug) === "country" && <Flag code={selectedBooth.country.flag} className="h-6" />}
                           <div>
                             <p className="text-sm font-extrabold text-ink">
-                              {getMapCode(selectedBooth.country)}{" "}
+                              #{selectedBooth.booth.id}{" "}
                               {selectedBooth.country.name}
                             </p>
                             <p className="text-xs text-ink-soft">
@@ -438,7 +390,7 @@ export function FestivalMap({
 
                     {selectedBooth && (
                       <Link
-                        href={`/country/${selectedBooth.country.slug}`}
+                        href={`/stand/${standSlug(selectedBooth.country.slug, selectedBooth.booth.id)}`}
                         className="mt-3 flex items-center justify-between rounded-lg bg-brand px-3 py-2 text-sm font-semibold text-white hover:bg-brand-dark"
                       >
                         {t("map.view", {
@@ -458,7 +410,7 @@ export function FestivalMap({
             <button
               type="button"
               aria-label={t("map.zoomIn")}
-              onClick={() => setZoom((value) => Math.min(2, value + 0.25))}
+              onClick={() => setZoom((value) => Math.min(4, value + 0.5))}
               className="grid size-9 place-items-center text-ink hover:bg-mist"
             >
               <Plus className="size-4" />
@@ -469,7 +421,7 @@ export function FestivalMap({
             <button
               type="button"
               aria-label={t("map.zoomOut")}
-              onClick={() => setZoom((value) => Math.max(1, value - 0.25))}
+              onClick={() => setZoom((value) => Math.max(1, value - 0.5))}
               className="grid size-9 place-items-center text-ink hover:bg-mist"
             >
               <Minus className="size-4" />
@@ -514,14 +466,14 @@ export function FestivalMap({
                         : "text-ink hover:bg-mist",
                     )}
                   >
-                    <Flag code={country.flag} className="h-4" />
+                    {getStandKind(country.slug) === "country" && <Flag code={country.flag} className="h-4" />}
 
                     <span className="flex-1 font-medium">
                       {country.name}
                     </span>
 
                     <span className="text-xs font-bold text-ink-faint">
-                      {getMapCode(country)}
+                      #{booth.id}
                     </span>
 
                     <ChevronRight className="size-3.5 text-ink-faint" />
@@ -550,7 +502,7 @@ export function FestivalMap({
             </li>
 
             {(Object.keys(facilityStyle) as MapFacilityType[])
-              .filter((key) => facilityStyle[key].legend)
+              .filter((key) => facilityStyle[key].legend && facilities.some(f => f.type === key))
               .map((key) => (
                 <li key={key} className="flex items-center gap-2">
                   <span
@@ -566,174 +518,5 @@ export function FestivalMap({
         </Card>
       </aside>
     </div>
-  );
-}
-
-/** Festival ground: grass, paths and trees. */
-
-function MapGround() {
-  return (
-    <g aria-hidden="true">
-      {/* Dasar rumput */}
-      <rect
-        x={0}
-        y={0}
-        width={1000}
-        height={680}
-        fill="#dce8c8"
-      />
-
-      {/* Variasi area rumput */}
-      <path
-        d="M0 0 H1000 V160
-           Q920 190 880 250
-           Q840 310 865 390
-           Q890 470 840 540
-           Q800 600 720 680
-           H0 Z"
-        fill="#d3e2bc"
-      />
-
-      <path
-        d="M0 520
-           Q130 480 240 420
-           Q350 365 420 295
-           Q500 220 610 170
-           Q730 110 875 145"
-        fill="none"
-        stroke="#c3d8ac"
-        strokeWidth={2}
-        strokeDasharray="5 9"
-      />
-
-      {/* Jalur utama melengkung mengikuti formasi tapal kuda */}
-      <path
-        d="M45 525
-           C145 480 245 430 340 365
-           C430 305 485 245 560 205
-           C650 155 750 115 875 135
-           C920 145 950 185 950 240
-           L950 500"
-        fill="none"
-        stroke="#c5b89b"
-        strokeWidth={42}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-
-      {/* Permukaan jalan */}
-      <path
-        d="M45 525
-           C145 480 245 430 340 365
-           C430 305 485 245 560 205
-           C650 155 750 115 875 135
-           C920 145 950 185 950 240
-           L950 500"
-        fill="none"
-        stroke="#eee3cc"
-        strokeWidth={34}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-
-      {/* Jalan penghubung ke deret booth bagian bawah */}
-      <path
-        d="M270 545
-           Q430 560 610 550
-           Q735 545 850 525"
-        fill="none"
-        stroke="#c5b89b"
-        strokeWidth={30}
-        strokeLinecap="round"
-      />
-
-      <path
-        d="M270 545
-           Q430 560 610 550
-           Q735 545 850 525"
-        fill="none"
-        stroke="#eee3cc"
-        strokeWidth={23}
-        strokeLinecap="round"
-      />
-
-      {/* Jalur pendek menuju panggung */}
-      <path
-        d="M810 250
-           Q850 250 885 270"
-        fill="none"
-        stroke="#c5b89b"
-        strokeWidth={22}
-        strokeLinecap="round"
-      />
-
-      <path
-        d="M810 250
-           Q850 250 885 270"
-        fill="none"
-        stroke="#eee3cc"
-        strokeWidth={15}
-        strokeLinecap="round"
-      />
-
-      {/* Area plaza panggung utama */}
-      <ellipse
-        cx={810}
-        cy={250}
-        rx={78}
-        ry={55}
-        fill="#e8dfca"
-        stroke="#d0c3a8"
-        strokeWidth={2}
-      />
-
-      {/* Pohon dekoratif — diletakkan di tepi area */}
-      {[
-        [55, 100],
-        [115, 155],
-        [65, 300],
-        [165, 335],
-        [245, 300],
-        [340, 250],
-        [390, 205],
-        [455, 170],
-        [540, 115],
-        [635, 75],
-        [710, 75],
-        [770, 80],
-        [970, 170],
-        [980, 225],
-        [980, 335],
-        [975, 420],
-        [880, 610],
-        [210, 625],
-        [80, 610],
-      ].map(([x, y], index) => (
-        <g key={`tree-${index}`} transform={`translate(${x}, ${y})`}>
-          <ellipse
-            cx={2}
-            cy={7}
-            rx={12}
-            ry={5}
-            fill="#9bb58a"
-            opacity={0.35}
-          />
-          <circle
-            cx={0}
-            cy={0}
-            r={10}
-            fill="#6f9863"
-            stroke="#557b4c"
-            strokeWidth={1}
-          />
-          <circle
-            cx={-3}
-            cy={-3}
-            r={4}
-            fill="#8eb17c"
-          />
-        </g>
-      ))}
-    </g>
   );
 }

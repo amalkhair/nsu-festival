@@ -133,6 +133,34 @@ export const en = {
   "explore.readMore": "Read more",
   "explore.readLess": "Show less",
 
+  "stand.defaultTitle": "Festival Stand",
+
+  "stand.defaultDescription": "Information about a festival stand.",
+
+  "stand.back": "Back to festival map",
+
+  "stand.booth": "Booth",
+
+  "stand.kind.country": "Country stand",
+
+  "stand.kind.regional": "Regional collective",
+
+  "stand.kind.organization": "Organization stand",
+
+  "stand.kind.thematic": "Thematic pavilion",
+
+  "stand.kind.unassigned": "Stand information",
+
+  "stand.translationNotice": "Russian translation is still being prepared. English text is shown for this stand.",
+
+  "stand.details": "About this stand",
+
+  "stand.pending": "The stand team has not published its full description yet.",
+
+  "stand.resources": "Further information",
+
+  "stand.exploreCountry": "Explore the country’s culture",
+
   "footer.tagline": "A World of Cultures, One Community",
   "footer.prototype": "Prototype v0 · content is sample data",
 

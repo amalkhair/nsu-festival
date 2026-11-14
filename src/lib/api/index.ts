@@ -18,6 +18,8 @@ import { booths, facilities } from "@/data/map";
 import { countriesRu, tagsRu } from "@/data/ru/countries";
 import { daysRu, facilitiesRu, festivalRu, scheduleRu, stagesRu } from "@/data/ru/festival";
 import { getLocale } from "@/lib/i18n/server";
+import { getStand as findStand, resolveStand, stands } from "@/data/stands";
+import type { ResolvedStand } from "@/types/stand";
 
 async function resolve(locale?: Locale): Promise<Locale> {
   return locale ?? (await getLocale());
@@ -95,4 +97,16 @@ export async function getSchedule(locale?: Locale): Promise<ScheduleItem[]> {
 export async function getMap(locale?: Locale) {
   const loc = await resolve(locale);
   return { booths, facilities: facilities.map((f) => localizeFacility(f, loc)) };
+}
+
+/** Unified stand data access; future DB/CMS replacement stays behind this boundary. */
+export async function getStandDetail(slug: string, locale?: Locale): Promise<ResolvedStand | undefined> {
+  const stand = findStand(slug);
+  if (!stand || stand.status !== "published") return undefined;
+  return resolveStand(stand, await resolve(locale));
+}
+
+export async function getStands(locale?: Locale): Promise<ResolvedStand[]> {
+  const loc = await resolve(locale);
+  return stands.filter((stand) => stand.status === "published").map((stand) => resolveStand(stand, loc));
 }

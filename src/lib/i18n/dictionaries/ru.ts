@@ -138,6 +138,34 @@ export const ru: Dictionary = {
   "explore.readMore": "Подробнее",
   "explore.readLess": "Свернуть",
 
+  "stand.defaultTitle": "Стенд фестиваля",
+
+  "stand.defaultDescription": "Информация о стенде фестиваля.",
+
+  "stand.back": "Вернуться к карте фестиваля",
+
+  "stand.booth": "Стенд",
+
+  "stand.kind.country": "Национальный стенд",
+
+  "stand.kind.regional": "Региональное объединение",
+
+  "stand.kind.organization": "Стенд организации",
+
+  "stand.kind.thematic": "Тематический павильон",
+
+  "stand.kind.unassigned": "Информация о стенде",
+
+  "stand.translationNotice": "Перевод ещё готовится. Пока для этого стенда показан английский текст.",
+
+  "stand.details": "О стенде",
+
+  "stand.pending": "Команда стенда ещё не опубликовала полное описание.",
+
+  "stand.resources": "Дополнительная информация",
+
+  "stand.exploreCountry": "Узнать о культуре страны",
+
   "footer.tagline": "Мир культур — одно сообщество",
   "footer.prototype": "Прототип v0 · тексты-примеры",
 

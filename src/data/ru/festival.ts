@@ -59,6 +59,8 @@ export const facilitiesRu: Record<string, string> = {
   "stage-garden": "Садовая сцена",
   "rest-lawn-west": "Зона отдыха (лужайка)",
   "rest-lawn-east": "Зона отдыха (лужайка)",
+  "food-west": "Фуд-корт (запад)",
+  "toilet-east": "Туалеты",
   "food-east": "Фуд-корт",
   "food-drinks": "Напитки и чай",
   medical: "Медпункт",

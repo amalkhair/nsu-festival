@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="1000" height="680" viewBox="0 0 1000 680" role="img"
+  aria-label="Minecraft-style ground map of the NSU courtyard">
+<defs>
+  <clipPath id="canvas"><rect width="1000" height="680"/></clipPath>
+  <pattern id="plaza" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(-16)">
+    <rect width="20" height="20" fill="#f1ecdf"/>
+    <path d="M0 0H20M0 10H20M0 20H20M0 0V10M10 10V20M20 0V10" stroke="#ddd7c8" stroke-width=".6"/>
+    <rect x="2" y="2" width="6" height="3" fill="#fdf9ea" opacity=".8"/>
+    <rect x="12" y="12" width="6" height="3" fill="#e8dfc9" opacity=".55"/>
+  </pattern>
+  <pattern id="grass" width="20" height="20" patternUnits="userSpaceOnUse">
+    <rect width="20" height="20" fill="#c1e69a"/>
+    <rect x="1" y="2" width="8" height="7" fill="#d4efa9"/>
+    <rect x="11" y="11" width="7" height="7" fill="#a7d581"/>
+    <rect x="4" y="15" width="3" height="2" fill="#e3f3ba"/>
+  </pattern>
+  <pattern id="roof" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(-16)">
+    <rect width="24" height="24" fill="#e6e4d7"/>
+    <path d="M0 0H24M0 12H24M0 24H24M12 0V12M0 12V24" fill="none" stroke="#d4d1c3" stroke-width=".55"/>
+    <rect x="3" y="3" width="8" height="4" fill="#f0eee4" opacity=".6"/>
+  </pattern>
+  <pattern id="rooms" width="40" height="48" patternUnits="userSpaceOnUse" patternTransform="rotate(-16)">
+    <rect width="40" height="48" fill="#e1e5e4"/>
+    <path d="M0 0V48M40 0V48M0 25H40M20 0V25" stroke="#fff" stroke-width="2.6" fill="none"/>
+    <rect x="3" y="3" width="14" height="17" fill="#f0f1e9"/>
+    <rect x="23" y="4" width="13" height="16" fill="#d5eac2"/>
+  </pattern>
+  <pattern id="stone" width="12" height="12" patternUnits="userSpaceOnUse">
+    <rect width="12" height="12" fill="#e4e3d6"/>
+    <path d="M0 0H12M0 6H12M6 0V6M0 6V12" fill="none" stroke="#d3d1c3" stroke-width=".65"/>
+  </pattern>
+  <g id="oak">
+    <rect x="-3" y="4" width="6" height="9" fill="#745f42"/>
+    <rect x="-12" y="-9" width="25" height="22" fill="#547b38" opacity=".22"/>
+    <rect x="-12" y="-13" width="24" height="22" fill="#477536"/>
+    <rect x="-8" y="-17" width="17" height="8" fill="#73a54b"/>
+    <rect x="-15" y="-8" width="8" height="13" fill="#5b8d3d"/>
+    <rect x="-7" y="-8" width="14" height="11" fill="#89b95a"/>
+    <rect x="-4" y="-7" width="6" height="3" fill="#bce181"/>
+  </g>
+  <g id="small-oak">
+    <rect x="-2" y="3" width="4" height="7" fill="#776348"/>
+    <rect x="-8" y="-9" width="17" height="16" fill="#56853b"/>
+    <rect x="-5" y="-12" width="12" height="6" fill="#8dbb5b"/>
+    <rect x="-10" y="-4" width="6" height="9" fill="#6b9946"/>
+    <rect x="-4" y="-4" width="8" height="6" fill="#a2c96b"/>
+  </g>
+</defs>
+<g clip-path="url(#canvas)" stroke-linejoin="round" stroke-linecap="round">
+  <!-- All geometry is drawn directly in the supplied image's 1000 × 680 coordinate space. -->
+  <rect width="1000" height="680" fill="url(#plaza)"/>
+  <!-- Upper campus: garden pockets and the long academic wing. -->
+  <path d="M-30 0H560L459 67L-30 203Z" fill="#e8e9df"/>
+  <path d="M-52 0L317-100L382 35L-24 155Z" fill="url(#rooms)" stroke="#fff" stroke-width="4"/>
+  <path d="M-15 57L118 18L146 57L8 98Z M201 5L297-22L316 15L225 42Z
+    M-24 126L124 83L138 100L-18 145Z M259 64L376 31L385 47L263 82Z"
+    fill="url(#grass)" opacity=".9"/>
+  <path d="M-49 151L647-49L677 64L-38 266Z" fill="url(#roof)" stroke="#d0cbbd" stroke-width="2"/>
+  <path d="M-36 254L675 50" stroke="#c9c5b7" stroke-width="2" fill="none"/>
+  <path d="M-34 260L674 55" stroke="#f8f6ec" stroke-width="5" fill="none"/>
+  <!-- Northeast wing remains a simple flat building mass like the supplied map. -->
+  <path d="M668-23L961-35L1009 246L928 271L872 250L832 243L796 110L727 105Z"
+    fill="url(#roof)" stroke="#d4d0c5" stroke-width="2"/>
+  <path d="M902-21L971 0L1013 184L976 204Z" fill="url(#grass)" opacity=".7"/>
+  <!-- Main courtyard lawn and the narrow outer green borders. -->
+  <path d="M143 310L631 172L641 211L238 329L192 342Z" fill="url(#grass)" stroke="#dbd9cc" stroke-width="5"/>
+  <path d="M195 350L632 226Q651 221 671 233L695 250L516 474Z"
+    fill="url(#grass)" stroke="#d1d0c2" stroke-width="9"/>
+  <path d="M155 385L479 517L335 711L218 711Z"
+    fill="url(#grass)" stroke="#d1d0c2" stroke-width="9"/>
+  <path d="M59 405L118 423L212 706L169 706Z" fill="url(#grass)" stroke="#d5d3c4" stroke-width="5"/>
+  <path d="M760 253L787 271L598 476L565 460Z"
+    fill="url(#grass)" stroke="#d7d5c7" stroke-width="5"/>
+  <path d="M485 553L530 572L447 707L407 707Z"
+    fill="url(#grass)" stroke="#d7d5c7" stroke-width="4"/>
+  <!-- Paths divide lawns as in the final image. -->
+  <path d="M157 374L480 518" fill="none" stroke="#c8c8b8" stroke-width="35"/>
+  <path d="M157 374L480 518" fill="none" stroke="url(#stone)" stroke-width="27"/>
+  <path d="M406 240L417 273 M244 284L254 324 M704 288L729 303
+    M664 333L690 348 M623 385L648 402 M585 431L610 449
+    M106 492L135 501 M134 568L164 578"
+    fill="none" stroke="#d0cfc0" stroke-width="7"/>
+  <!-- Smooth continuous pale lane, with a block-textured stone fill. -->
+  <path d="M-31 548L35 401Q65 323 137 289L631 146Q651 139 675 150L763 179
+    Q791 190 801 224L810 258L544 696"
+    fill="none" stroke="#c9c7bc" stroke-width="39"/>
+  <path d="M-31 548L35 401Q65 323 137 289L631 146Q651 139 675 150L763 179
+    Q791 190 801 224L810 258L544 696"
+    fill="none" stroke="#faf8ed" stroke-width="32"/>
+  <path d="M-31 548L35 401Q65 323 137 289L631 146Q651 139 675 150L763 179
+    Q791 190 801 224L810 258L544 696"
+    fill="none" stroke="url(#stone)" stroke-width="25" opacity=".8"/>
+  <!-- Small stair crossings at the northern row and on the east turn. -->
+  <g stroke="#c9c8bb" stroke-width="2">
+    <path d="M236 237L265 230M237 241L266 234M238 245L267 238M239 249L268 242M240 253L269 246"/>
+    <path d="M790 277L819 293M785 283L814 299M781 289L810 305M777 295L806 311"/>
+  </g>
+  <!-- The diagonal faculty connector overlays the lower east side of the grounds. -->
+  <path d="M750 375L881 242L1014 277L1009 421L883 532L709 709L566 709Z"
+    fill="#d9d6c8" stroke="#f8f6eb" stroke-width="6"/>
+  <path d="M771 378L882 257L1000 291L999 405L873 514L676 709L591 709Z"
+    fill="url(#roof)" stroke="#cdc9ba" stroke-width="2"/>
+  <path d="M607 709L784 412" fill="none" stroke="#f7f6ee" stroke-width="16"/>
+  <path d="M715 709L911 474" fill="none" stroke="#c9c7bc" stroke-width="2"/>
+  <!-- Small trees are accents within green areas, clear of stand footprints. -->
+
+<use xlink:href="#oak" x="270" y="368"/>
+<use xlink:href="#oak" x="332" y="351"/>
+<use xlink:href="#oak" x="397" y="333"/>
+<use xlink:href="#oak" x="469" y="313"/>
+<use xlink:href="#oak" x="541" y="291"/>
+<use xlink:href="#oak" x="286" y="411"/>
+<use xlink:href="#oak" x="362" y="397"/>
+<use xlink:href="#oak" x="435" y="389"/>
+<use xlink:href="#oak" x="514" y="366"/>
+<use xlink:href="#oak" x="575" y="342"/>
+<use xlink:href="#oak" x="414" y="435"/>
+<use xlink:href="#oak" x="501" y="420"/>
+<use xlink:href="#oak" x="562" y="390"/>
+<use xlink:href="#oak" x="232" y="475"/>
+<use xlink:href="#oak" x="285" y="501"/>
+<use xlink:href="#oak" x="340" y="525"/>
+<use xlink:href="#oak" x="389" y="545"/>
+<use xlink:href="#oak" x="275" y="571"/>
+<use xlink:href="#oak" x="321" y="606"/>
+<use xlink:href="#oak" x="264" y="635"/>
+<use xlink:href="#small-oak" x="170" y="305"/>
+<use xlink:href="#small-oak" x="317" y="265"/>
+<use xlink:href="#small-oak" x="456" y="225"/>
+<use xlink:href="#small-oak" x="604" y="186"/>
+<use xlink:href="#small-oak" x="81" y="459"/>
+<use xlink:href="#small-oak" x="158" y="605"/>
+<use xlink:href="#small-oak" x="704" y="319"/>
+<use xlink:href="#small-oak" x="666" y="362"/>
+<use xlink:href="#small-oak" x="624" y="409"/>
+</g></svg>

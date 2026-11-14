@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getStandKind, standSlug } from "@/lib/stand";
 import type { Country } from "@/types";
 import { cn } from "@/lib/utils";
 import { Flag } from "@/components/ui/Flag";
@@ -16,7 +17,7 @@ export function CountryCard({
 }) {
   return (
     <Link
-      href={`/country/${country.slug}`}
+      href={`/stand/${standSlug(country.slug, country.booth.split(",")[0].trim())}`}
       className={cn(
         "group block overflow-hidden rounded-card bg-white shadow-card ring-1 ring-line/70 transition hover:-translate-y-0.5 hover:shadow-lift",
         className,
@@ -29,7 +30,7 @@ export function CountryCard({
           alt={country.name}
           className="transition duration-500 group-hover:scale-105"
         />
-        <Flag code={country.flag} className="absolute bottom-2 left-2 h-5 shadow-sm" />
+        {getStandKind(country.slug) === "country" && <Flag code={country.flag} className="absolute bottom-2 left-2 h-5 shadow-sm" />}
       </div>
       <div className="px-3 py-2.5">
         <p className="text-sm font-bold text-ink">{country.name}</p>

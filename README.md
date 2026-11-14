@@ -134,3 +134,11 @@ replace it with the real site plan when you have it.
 5. **Reward redemption:** a staff scanner page that marks tokens as used
 6. **Admin:** Supabase Auth for organisers and booth leads; editors for countries, schedule and map
 7. **Multi-country CMS:** each booth team manages its own content
+
+## 36-stand bilingual architecture
+
+The 36-stand interactive map keeps its 1000 × 680 coordinate system. Popup links and directory cards open `/stand/[slug]`, which supports country, institution, thematic and provisional booths. Country pages at `/country/[slug]` continue to hold deeper culture, recipes and quiz content. English and Russian UI both use the server-side `nsu-locale` cookie. Static `src/data/stands.ts` is an adapter for a future CMS, not a production database. See `docs/ARCHITECTURE-ID.md`.
+
+## Campus hosting and selected map
+
+See [deployment instructions](docs/DEPLOYMENT-ID.md) for runtime `SITE_URL`, standalone Docker hosting and domain migration. The map uses Version A geometry uniformly fitted to 1000 × 680 with the final Minecraft ground SVG. China booths 15 and 16 have separate stand URLs. Run `npm run verify:data`, `npm run typecheck`, and `npm run build` before deployment.

@@ -1,52 +1,54 @@
+import { getStandKind, standSlug } from "@/lib/stand";
 import type { Country } from "@/types";
-import type { ResolvedStand, Stand, StandKind, StandLocale } from "@/types/stand";
+import type { ResolvedStand, Stand, StandLocale } from "@/types/stand";
 import { countries } from "@/data/countries/list";
+import { booths } from "@/data/map";
+import { countriesRu, tagsRu } from "@/data/ru/countries";
 
-/**
- * Transitional adapter from the current prototype data to the unified stand model.
- * Classification of non-country records is provisional and must be confirmed by OPD.
- * Replace this adapter with Directus/PostgreSQL queries later without changing UI types.
- */
-const NON_COUNTRY_KINDS: Record<string, StandKind> = {
-  "english-countries": "regional_collective",
-  "chinese-tea": "thematic",
-  sibupk: "organization",
-  engineering: "organization",
-  sibstrin: "organization",
-  ngpu: "organization",
-  nguadi: "organization",
-  ngtu: "organization",
-  "tea-pavilion": "thematic",
-  "unassigned-36": "unassigned",
-};
-
-function toStand(country: Country): Stand {
-  const kind = NON_COUNTRY_KINDS[country.slug] ?? "country";
+/** Temporary adapter: v0 identity data -> common stand model, later replace via data layer. */
+function toStand(country: Country, boothCode: string): Stand {
+  const kind = getStandKind(country.slug);
+  const russian = countriesRu[country.slug];
+  const translations: Stand["translations"] = {
+    en: {
+      name: country.name,
+      tagline: country.tagline,
+      summary: country.tags.join(" · "),
+      description: "",
+      reviewStatus: "approved",
+    },
+  };
+  if (russian) {
+    translations.ru = {
+      name: russian.name,
+      tagline: russian.tagline,
+      summary: country.tags.map((tag) => tagsRu[tag] ?? tag).join(" · "),
+      description: "",
+      reviewStatus: "approved",
+    };
+  }
   return {
-    id: `stand-${country.booth.padStart(2, "0")}`,
-    slug: country.slug,
-    boothCode: country.booth,
+    id: `stand-${boothCode.padStart(2, "0")}`,
+    slug: standSlug(country.slug, boothCode),
+    boothCode,
     kind,
     countrySlug: kind === "country" ? country.slug : null,
-    flagCode: country.flag,
+    // Do not display an arbitrary Russian flag on institution or themed stands.
+    flagCode: kind === "country" ? country.flag : undefined,
     theme: country.theme,
     tags: country.tags,
     status: "published",
-    translations: {
-      en: {
-        name: country.name,
-        tagline: country.tagline,
-        summary: country.tags.join(" · "),
-        description: "",
-        reviewStatus: "approved",
-      },
-      // Do not invent Russian copy. Missing RU records explicitly fall back to EN.
-    },
+    translations,
     externalResources: [],
   };
 }
 
-export const stands: Stand[] = countries.map(toStand);
+// One identity per physical stand; several stands can share a country profile.
+export const stands: Stand[] = booths.map((booth) => {
+  const country = countries.find(c => c.slug === booth.country);
+  if (!country) throw new Error(`Missing country profile for stand ${booth.id}`);
+  return toStand(country, booth.id);
+});
 
 export function getStand(slug: string): Stand | undefined {
   return stands.find((stand) => stand.slug === slug);
